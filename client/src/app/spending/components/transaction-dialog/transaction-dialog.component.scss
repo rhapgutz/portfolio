@@ -1,0 +1,10 @@
+.mat-button-toggle {
+  &:hover, &.mat-button-toggle-checked {
+    background-color: #3f51b5 !important;
+    color: #fff !important;
+  }
+}
+
+.mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-checked::after {
+  color: #fff !important;
+}

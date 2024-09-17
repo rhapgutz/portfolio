@@ -1,0 +1,20 @@
+<div class="transactions-panel" *ngIf="transactionsData$ | async as transactionsData">
+  <div class="header">
+    <h2 class="title text-3xl">Transactions</h2>
+    <button mat-mini-fab (click)="onAddNewTransaction()">
+      <mat-icon class="add-course-btn">add</mat-icon>
+    </button>
+  </div>
+  <div class="content-center text-center mt-6">
+    <filter-date></filter-date>
+  </div>
+  <mat-grid-list cols="2" rowHeight="26px" class="mb-6">
+    <mat-grid-tile class="bg-red-700 text-white">{{ transactionsData.totalExpense | currency: 'PHP' }}</mat-grid-tile>
+    <mat-grid-tile class="bg-green-700 text-white">{{ transactionsData.totalIncome | currency: 'PHP' }}</mat-grid-tile>
+  </mat-grid-list>
+  <mat-card appearance="outlined">
+    <mat-card-content class="overflow-auto">
+      <transaction-list [transactions]="transactionsData.transactions"></transaction-list>
+    </mat-card-content>
+  </mat-card>
+</div>

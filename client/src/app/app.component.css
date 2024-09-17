@@ -1,0 +1,16 @@
+
+body {
+  margin: 0;
+}
+
+main {
+  margin: 30px;
+}
+
+mat-toolbar a {
+  color: white;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

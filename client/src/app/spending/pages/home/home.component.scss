@@ -1,0 +1,29 @@
+.transactions-panel {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.title {
+  text-align: center;
+  margin-right: 15px;
+  margin-bottom: 0;
+}
+
+.example-month-picker .mat-calendar-period-button {
+  pointer-events: none;
+}
+
+.example-month-picker .mat-calendar-arrow {
+  display: none;
+}
+
+mat-card-content{
+  max-height: 600px;
+}

@@ -1,0 +1,43 @@
+<div class="transactions-panel" *ngIf="spendingData$ | async as spendingData">
+  <div class="header">
+    <h2 class="title text-3xl">Spending</h2>
+    <button mat-mini-fab routerLink="/add-new-transaction">
+      <mat-icon class="add-course-btn">add</mat-icon>
+    </button>
+  </div>
+  <div class="content-center text-center mt-6">
+    <filter-date></filter-date>
+  </div>
+  <mat-tab-group>
+    <mat-tab label="Data" class="h-full">
+      <mat-card appearance="outlined" class="spending-card">
+        <mat-card-content class="overflow-auto">
+          <section>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="spendingData.balancePercentage"
+              color="error"
+            ></mat-progress-bar>
+          </section>
+          <section>
+            <category-total-transaction-list
+              [categoryTransactions]="spendingData.categoryExpenseTransactions"
+              [expenseTotal]="spendingData.totalExpense"
+              [incomeTotal]="spendingData.totalIncome"
+              [balance]="spendingData.balance"
+            ></category-total-transaction-list>
+          </section>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Chart" class="h-full">
+      <mat-card appearance="outlined" class="min-h-96">
+        <mat-card-content class="overflow-auto">
+          <category-total-transaction-chart
+            [chartData]="chartData$ | async"
+          ></category-total-transaction-chart>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+</div>

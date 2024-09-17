@@ -1,0 +1,20 @@
+<mat-sidenav-container fullscreen>
+  <mat-sidenav> </mat-sidenav>
+  <mat-toolbar color="primary">
+    <button mat-icon-button routerLink="/">
+      <mat-icon>home</mat-icon>
+    </button>
+    <span class="spacer"></span>
+    <a mat-button routerLink="/transactions">
+      <mat-icon>wallet</mat-icon>
+      Transactions
+    </a>
+    <a mat-button routerLink="/categories">
+      <mat-icon>category</mat-icon>
+      Categories
+    </a>
+  </mat-toolbar>
+  <messages></messages>
+  <loading></loading>
+  <router-outlet></router-outlet>
+</mat-sidenav-container>

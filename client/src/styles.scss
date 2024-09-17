@@ -1,0 +1,25 @@
+@use '@angular/material' as mat;
+/* You can add global styles to this file, and also import other style files */
+
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.spending-card .mdc-linear-progress__buffer .mdc-linear-progress__buffer-bar {
+  background-color: red !important;
+}
+
+.spending-card .mdc-linear-progress__bar  .mdc-linear-progress__bar-inner {
+  border-color: green !important;
+}
+
+.spending-card {
+  & .mdc-linear-progress__buffer, .mdc-linear-progress__bar, .mat-mdc-progress-bar {
+    height: 12px !important
+  }
+  .mdc-linear-progress__bar-inner {
+    border-top-width: 12px;
+  }
+}

@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+<loading></loading>
+<messages></messages>
+<mat-dialog-content [formGroup]="form">
+  <mat-radio-group
+    formControlName="type"
+    aria-abel="Select a category type"
+    class="w-100 flex justify-evenly"
+  >
+    <mat-radio-button value="expense">Expense</mat-radio-button>
+    <mat-radio-button value="income">Income</mat-radio-button>
+  </mat-radio-group>
+  <mat-form-field class="w-full">
+    <mat-label>Name</mat-label>
+    <input matInput placeholder="Name" formControlName="name" />
+  </mat-form-field>
+  <mat-form-field class="w-full">
+    <mat-icon matPrefix id="categoryIcon" *ngIf="showIcon$ | async">{{
+      selectedIcon
+    }}</mat-icon>
+    <input matInput formControlName="icon" class="hidden" />
+    <input
+      matInput
+      placeholder="Icon"
+      [iconPicker]="selectedIcon"
+      [ipWidth]="'280px'"
+      [ipIconPack]="['mat']"
+      [ipIconSize]="'24px'"
+      [ipPosition]="'top'"
+      (iconPickerSelect)="onIconPickerSelect($event)"
+      type="text"
+    />
+    <mat-icon class="cursor-pointer" matSuffix (click)="resetIcon()"
+      >close</mat-icon
+    >
+  </mat-form-field>
+  <mat-form-field class="w-full">
+    <input
+      matInput
+      readonly
+      placeholder="Chart Color"
+      [(colorPicker)]="selectedChartColor"
+      [style.background]="selectedChartColor"
+      [style.color]="selectedChartColor"
+      formControlName="chartColor"
+      (colorPickerChange)="onColorPickerChange($event)"
+    />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="text-right px-5 pb-6 justify-end">
+  <button mat-raised-button (click)="close()">Close</button>
+  <button
+    *ngIf="category"
+    mat-raised-button
+    class="bg-red-700 text-white"
+    (click)="delete()"
+  >
+    Delete
+  </button>
+  <button mat-raised-button color="primary" #saveButton (click)="save()">
+    Save
+  </button>
+</mat-dialog-actions>

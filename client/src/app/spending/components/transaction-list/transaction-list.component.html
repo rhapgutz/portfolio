@@ -1,0 +1,11 @@
+<mat-list *ngIf="transactions">
+  <ng-container *ngFor="let transaction of transactions">
+    <mat-list-item class="cursor-pointer hover:bg-slate-300" (click)="onEditTransaction(transaction)">
+      <mat-icon matListItemIcon>{{ transaction.category.icon }}</mat-icon>
+      <div matListItemTitle>{{ transaction.notes || transaction.category.name }}</div>
+      <div matListItemLine>{{ transaction.transactionDate | date }}</div>
+      <div [ngClass]="{'text-red-500': transaction.type === 'expense', 'text-green-500': transaction.type === 'income' }" matListItemMeta>{{ transaction.amount | currency: 'PHP' }}</div>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </ng-container>
+</mat-list>

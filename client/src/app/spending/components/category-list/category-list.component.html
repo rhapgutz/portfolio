@@ -1,0 +1,11 @@
+<mat-list *ngIf="categories">
+  <mat-list-item
+    *ngFor="let category of categories"
+    class="cursor-pointer hover:bg-slate-300"
+    (click)="onEditCategory(category)"
+  >
+    <mat-icon matListItemIcon>{{ category.icon || "sell" }}</mat-icon>
+    <div matListItemTitle>{{ category.name }}</div>
+    <div matListItemMeta><mat-icon>chevron_right</mat-icon></div>
+  </mat-list-item>
+</mat-list>

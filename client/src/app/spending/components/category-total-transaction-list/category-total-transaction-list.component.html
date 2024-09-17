@@ -1,0 +1,23 @@
+<mat-list *ngIf="categoryTransactions">
+  <mat-list-item>
+    <div matListItemTitle class="font-bold">Income</div>
+    <div class="text-green-500 font-bold text-sm" matListItemMeta>{{ incomeTotal | currency: 'PHP'  }}</div>
+  </mat-list-item>
+  <mat-list-item>
+    <div matListItemTitle class="font-bold">Expense</div>
+    <div class="text-red-500 font-bold text-sm" matListItemMeta>{{ expenseTotal | currency: 'PHP'  }}</div>
+  </mat-list-item>
+  <ng-container *ngFor="let categoryTransaction of categoryTransactions">
+    <mat-list-item class="pl-12">
+      <div matListItemTitle>{{ categoryTransaction.category.name }}</div>
+      <div matListItemMeta>
+        {{ categoryTransaction.category.totalAmount | currency: 'PHP' }}
+      </div>
+    </mat-list-item>
+  </ng-container>
+  <mat-divider></mat-divider>
+  <mat-list-item>
+    <div matListItemTitle class="font-bold">Balance</div>
+    <div class="text-blue-500 font-bold text-sm" matListItemMeta>{{ balance | currency: 'PHP' }}</div>
+  </mat-list-item>
+</mat-list>
