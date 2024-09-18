@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from "@angular/core";
+import { NgModule } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -15,6 +15,7 @@ import { environment } from "../environments/environment";
 import { EffectsModule } from "@ngrx/effects";
 import { AppEffects } from "./app.effects";
 import { RouterState, StoreRouterConnectingModule } from "@ngrx/router-store";
+import { EntityDataModule } from "@ngrx/data";
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,6 +38,7 @@ import { RouterState, StoreRouterConnectingModule } from "@ngrx/router-store";
       logOnly: environment.production,
     }),
     EffectsModule.forRoot([AppEffects]),
+    EntityDataModule.forRoot({}),
     StoreRouterConnectingModule.forRoot({
       stateKey: "router",
       routerState: RouterState.Minimal,

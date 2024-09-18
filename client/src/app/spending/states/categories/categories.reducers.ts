@@ -26,6 +26,9 @@ export const categoriesReducer = createReducer(
   initialCatgoriesState,
   on(CategoriesActions.allCategoriesLoaded, (state, action) =>
     adapter.setAll(action.categories, { ...state, allCategoriesLoaded: true })
+  ),
+  on(CategoriesActions.categoryUpdated, (state, action) =>
+    adapter.updateOne(action.update, state)
   )
 );
 

@@ -14,22 +14,21 @@ import { TransactionDialogComponent } from "./components/transaction-dialog/tran
 import { CategoryDialogComponent } from "./components/category-dialog/category-dialog.component";
 import { CategoryTotalTransactionChartComponent } from "./components/category-total-transaction-chart/category-total-transaction-chart.component";
 import { FilterDateComponent } from "./components/filter-date/filter-date.component";
-import { CategoriesHttpService } from "./services/categories.service";
-import { TransactionsHttpService } from "./services/transactionsHttp.service";
-import { CategoriesResolver } from "./states/categories/categories.resolver";
-import { StoreModule } from "@ngrx/store";
+import { CategoriesHttpService } from "./services/categories/categories-http.service";
+import { TransactionsHttpService } from "./services/transactions/transactions-http.service";
+import { CategoriesResolver } from "./services/categories/categories.resolver";
+import { TransactionsResolver } from "./services/transactions/transactions.resolver";
 import {
-  categoriesFeatureKey,
-  categoriesReducer,
-} from "./states/categories/categories.reducers";
-import {
-  transactionsFeatureKey,
-  transactionsReducer,
-} from "./states/transactions/transactions.reducers";
-import { EffectsModule } from "@ngrx/effects";
-import { CategoriesEffects } from "./states/categories/categories.effects";
-import { TransactionsEffects } from "./states/transactions/transactions.effects";
-import { TransactionsResolver } from "./states/transactions/transactions.resolver";
+  EntityDataService,
+  EntityDefinitionService,
+  EntityMetadataMap,
+} from "@ngrx/data";
+import { CategoryEntityService } from "./services/categories/category-entity.service";
+import { CategoriesDataService } from "./services/categories/categories-data.service";
+import { Category } from "./model/category";
+import { Transaction } from "./model/transaction";
+import { TransactionEntityService } from "./services/transactions/transaction-entity.service";
+import { TransactionsDataService } from "./services/transactions/transactions-data.service";
 
 const routes: Routes = [
   {
@@ -59,6 +58,29 @@ const routes: Routes = [
   },
 ];
 
+export function selectedCategoryId(a: Category): string {
+  return a._id;
+}
+
+export function selectedTransactionId(a: Transaction): string {
+  return a._id;
+}
+
+const entityMetadata: EntityMetadataMap = {
+  Category: {
+    selectId: selectedCategoryId,
+    entityDispatcherOptions: {
+      optimisticUpdate: true,
+    },
+  },
+  Transaction: {
+    selectId: selectedTransactionId,
+    entityDispatcherOptions: {
+      optimisticUpdate: true,
+    },
+  },
+};
+
 @NgModule({
   declarations: [
     HomeComponent,
@@ -78,10 +100,25 @@ const routes: Routes = [
     ColorPickerModule,
     ChartModule,
     RouterModule.forChild(routes),
-    StoreModule.forFeature(categoriesFeatureKey, categoriesReducer),
-    StoreModule.forFeature(transactionsFeatureKey, transactionsReducer),
-    EffectsModule.forFeature([CategoriesEffects, TransactionsEffects]),
   ],
-  providers: [CategoriesHttpService, TransactionsHttpService],
+  providers: [
+    CategoriesHttpService,
+    TransactionsHttpService,
+    CategoryEntityService,
+    CategoriesDataService,
+    TransactionEntityService,
+    TransactionsDataService,
+  ],
 })
-export class SpendingModule {}
+export class SpendingModule {
+  constructor(
+    private eds: EntityDefinitionService,
+    private entityDataService: EntityDataService,
+    private categoriesDataService: CategoriesDataService,
+    private transactionsDataService: TransactionsDataService
+  ) {
+    eds.registerMetadataMap(entityMetadata);
+    entityDataService.registerService("Category", categoriesDataService);
+    entityDataService.registerService("Transaction", transactionsDataService);
+  }
+}

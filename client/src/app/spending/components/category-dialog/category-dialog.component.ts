@@ -2,9 +2,9 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Category } from "../../model/category";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { CategoriesStore } from "../../services/categories.store";
 import { BehaviorSubject, Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+import { delay } from "rxjs/operators";
+import { CategoryEntityService } from "../../services/categories/category-entity.service";
 
 @Component({
   selector: "category-dialog",
@@ -18,56 +18,72 @@ export class CategoryDialogComponent implements OnInit {
   defaultIcon: string = "paid";
   selectedIcon: string = "none";
   selectedChartColor: string;
+  mode: "update" | "create";
 
   private showIconSubject = new BehaviorSubject<boolean>(false);
   showIcon$: Observable<boolean> = this.showIconSubject.asObservable();
 
+  loading$: Observable<boolean>;
+
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<CategoryDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) category: Category,
-    private categoriesStore: CategoriesStore
+    @Inject(MAT_DIALOG_DATA) data,
+    private categoriesService: CategoryEntityService
   ) {
-    this.category = category;
-    this.form = this.fb.group({
-      type: [category?.type || "expense", Validators.required],
-      name: [category?.name, Validators.required],
-      icon: [category?.icon],
-      chartColor: [category?.chartColor],
-    });
+    this.title = data.dialogTitle;
+    this.category = data.category;
+    this.mode = data.mode;
+
+    const formControls = {
+      type: ["", Validators.required],
+      name: ["", Validators.required],
+      icon: ["", []],
+      chartColor: ["", []],
+    };
+
+    this.form = this.fb.group(formControls);
+
+    if (this.mode === "update") {
+      this.form.patchValue({ ...data.category });
+    } else if (this.mode === "create") {
+      this.form.patchValue({ type: "expense" });
+    }
+
+    this.loading$ = this.categoriesService.loading$.pipe(delay(0));
   }
 
   ngOnInit(): void {
     this.selectedIcon = this.category?.icon || "sell";
     this.selectedChartColor = this.category?.chartColor || "#cccccc";
-    this.title = this.category ? `Edit ${this.category.name}` : `New Category`;
     this.showIcon$.subscribe();
     const showIconByDefault =
       (this.selectedIcon && this.selectedIcon !== "none") === true;
     this.toggleShowIconSubject(showIconByDefault);
   }
 
-  save() {
-    const changes = this.form.value;
-    const observer = {
-      next: () => this.dialogRef.close(changes),
+  onSave() {
+    const category: Category = {
+      ...this.category,
+      ...this.form.value,
     };
-    if (this.category) {
-      this.categoriesStore
-        .saveCategory(this.category._id, changes)
-        .subscribe(observer);
-    } else {
-      this.categoriesStore.createCategory(changes).subscribe(observer);
+
+    if (this.mode === "update") {
+      this.categoriesService.update(category);
+      this.dialogRef.close();
+    } else if (this.mode === "create") {
+      this.categoriesService.add(category).subscribe((newCategory) => {
+        this.dialogRef.close();
+      });
     }
   }
 
-  delete() {
+  onDelete() {
     if (this.category) {
       if (window.confirm("Are sure you want to delete this item ?")) {
         //put your delete method logic here
-        this.categoriesStore
-          .deleteCategory(this.category._id)
-          .subscribe(() => this.close());
+        this.categoriesService.delete(this.category);
+        this.dialogRef.close();
       }
     }
   }

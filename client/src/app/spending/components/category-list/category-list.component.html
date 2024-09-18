@@ -1,11 +1,25 @@
 <mat-list *ngIf="categories">
   <mat-list-item
     *ngFor="let category of categories"
-    class="cursor-pointer hover:bg-slate-300"
-    (click)="onEditCategory(category)"
+    class="group cursor-pointer hover:bg-slate-300"
   >
     <mat-icon matListItemIcon>{{ category.icon || "sell" }}</mat-icon>
     <div matListItemTitle>{{ category.name }}</div>
-    <div matListItemMeta><mat-icon>chevron_right</mat-icon></div>
+    <div matListItemMeta>
+      <mat-icon class="group-hover:hidden">chevron_right</mat-icon>
+      <mat-action-list class="hidden group-hover:block">
+        <button
+          class="mr-2"
+          color="primary"
+          mat-mini-fab
+          (click)="onEditCategory(category)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button color="warn" mat-mini-fab (click)="onDelete(category)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-action-list>
+    </div>
   </mat-list-item>
 </mat-list>

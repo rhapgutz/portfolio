@@ -25,7 +25,7 @@ export class TransactionsService {
     private http: HttpClient
   ) {}
 
-  fetchSpendingData(filterDateValue: Moment | null) {
+  /* fetchSpendingData(filterDateValue: Moment | null) {
     console.log(filterDateValue);
     return combineLatest([
       this.store.select(selectExpenseFilterByDateTransactions(filterDateValue)),
@@ -67,9 +67,9 @@ export class TransactionsService {
         };
       })
     );
-  }
+  } */
 
-  /* fetchSpendingData(
+  fetchSpendingData(
     filterDateValue: Moment | null,
     transactions: Transaction[]
   ): SpendingData {
@@ -116,7 +116,7 @@ export class TransactionsService {
       categoryExpenseTransactions,
       categoriesChartData,
     };
-  } */
+  }
 
   filterByDate(
     filterDateValue: Moment | null,

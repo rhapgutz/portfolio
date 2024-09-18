@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import { TransactionsActions } from "../action-types";
 import { concatMap, map } from "rxjs/operators";
 import { allTransactionsLoaded } from "./transaction.actions";
-import { TransactionsHttpService } from "../../services/transactionsHttp.service";
+import { TransactionsHttpService } from "../../services/transactions/transactions-http.service";
 import { Injectable } from "@angular/core";
 
 @Injectable()

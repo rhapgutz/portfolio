@@ -1,11 +1,9 @@
 import { Router } from 'express';
 import {
-  getAllCategories,
   getCategory,
-  createCategory,
   updateCategory,
   deleteCategory,
-  getCategoryWithTotalAmount,
+  createCategory,
 } from '../controllers/categoryController.js';
 import {
   validateCategoryIdParam,
@@ -14,16 +12,11 @@ import {
 
 const router = Router();
 
-router.route('/with-total-amount').get(getCategoryWithTotalAmount);
-//router.route('/:type').get(validateCategoryTypeParam, getCategoriesByType);
+router.route('/').post(validateCategoryInput, createCategory);
 router
   .route('/:id')
   .get(validateCategoryIdParam, getCategory)
-  .patch(validateCategoryInput, validateCategoryIdParam, updateCategory)
+  .put(validateCategoryInput, validateCategoryIdParam, updateCategory)
   .delete(validateCategoryIdParam, deleteCategory);
-router
-  .route('/')
-  .get(getAllCategories)
-  .post(validateCategoryInput, createCategory);
 
 export default router;

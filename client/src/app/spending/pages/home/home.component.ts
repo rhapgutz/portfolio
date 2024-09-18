@@ -32,6 +32,7 @@ import {
   selectTotalExpenseFilterByDateTransactions,
   selectTotalIncomeFilterByDateTransactions,
 } from "../../states/transactions/transactions.selectors";
+import { TransactionEntityService } from "../../services/transactions/transaction-entity.service";
 
 export const MY_FORMATS = {
   parse: {
@@ -60,47 +61,20 @@ export class HomeComponent implements OnInit {
     private transactionsStore: TransactionsStore,
     private filterDateService: FilterDateService,
     private transactionsService: TransactionsService,
-    private chartStore: ChartStore
+    private chartStore: ChartStore,
+    private transactionEntityService: TransactionEntityService
   ) {}
 
   ngOnInit(): void {
-    this.spendingData$ = this.filterDateService.filterDateValue$.pipe(
-      mergeMap((date) => {
-        return combineLatest([
-          this.store.select(selectExpenseFilterByDateTransactions(date)),
-          this.store.select(selectTotalExpenseFilterByDateTransactions(date)),
-          this.store.select(selectTotalIncomeFilterByDateTransactions(date)),
-        ]);
-      }),
-      map(([expenseTransactions, totalExpense, totalIncome]) => {
-        const balance = totalIncome - totalExpense;
-        const balancePercentage =
-          totalExpense === 0 && totalIncome === 0
-            ? 50
-            : 100 - (totalExpense / totalIncome) * 100;
-        const categoryExpenseTransactions =
-          this.transactionsService.groupByCategoryTransaction(
-            expenseTransactions,
-            (transaction: Transaction) => transaction.category._id
-          );
-
-        const categoriesChartData = categoryExpenseTransactions.map(
-          (data: CategoryTransaction) =>
-            <PieChartSeriesData>{
-              name: data.category.name,
-              y: data.category.totalAmount,
-              color: data.category.chartColor,
-            }
+    this.spendingData$ = combineLatest([
+      this.filterDateService.filterDateValue$,
+      this.transactionEntityService.entities$,
+    ]).pipe(
+      map(([filterDateValue, transactions]) => {
+        return this.transactionsService.fetchSpendingData(
+          filterDateValue,
+          transactions
         );
-
-        return {
-          totalExpense,
-          totalIncome,
-          balance,
-          balancePercentage,
-          categoryExpenseTransactions,
-          categoriesChartData,
-        };
       })
     );
 

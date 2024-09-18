@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import { CategoriesActions } from "../action-types";
 import { concatMap, map } from "rxjs/operators";
 import { allCategoriesLoaded } from "./category.actions";
-import { CategoriesHttpService } from "../../services/categories.service";
+import { CategoriesHttpService } from "../../services/categories/categories-http.service";
 import { Injectable } from "@angular/core";
 
 @Injectable()
@@ -17,6 +17,20 @@ export class CategoriesEffects {
       })
     );
   });
+
+  saveCategory$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CategoriesActions.categoryUpdated),
+        concatMap((action) =>
+          this.categoriesHttpService.saveCategory(
+            action.update.id.toString(),
+            action.update.changes
+          )
+        )
+      ),
+    { dispatch: false }
+  );
 
   constructor(
     private actions$: Actions,

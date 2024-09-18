@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
+import categoriesRouter from './routes/categoriesRouter.js';
 import categoryRouter from './routes/categoryRouter.js';
 import transactionRouter from './routes/transactionRouter.js';
 
@@ -16,8 +17,9 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-app.use('/api/v1/categories', categoryRouter);
-app.use('/api/v1/transactions', transactionRouter);
+app.use('/api/categories', categoriesRouter);
+app.use('/api/category', categoryRouter);
+app.use('/api/transactions', transactionRouter);
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'not found' });

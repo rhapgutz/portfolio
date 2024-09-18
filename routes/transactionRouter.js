@@ -20,11 +20,7 @@ router
 router
   .route('/:id')
   .get(validateTransactionIdParam, getTransaction)
-  .patch(
-    validateTransactionInput,
-    validateTransactionIdParam,
-    updateTransaction
-  )
+  .put(validateTransactionInput, validateTransactionIdParam, updateTransaction)
   .delete(validateTransactionIdParam, deleteTransaction);
 
 export default router;

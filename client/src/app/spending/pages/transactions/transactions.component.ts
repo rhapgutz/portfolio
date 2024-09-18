@@ -24,6 +24,7 @@ import {
   selectTotalExpenseFilterByDateTransactions,
   selectTotalIncomeFilterByDateTransactions,
 } from "../../states/transactions/transactions.selectors";
+import { TransactionEntityService } from "../../services/transactions/transaction-entity.service";
 
 export const MY_FORMATS = {
   parse: {
@@ -49,22 +50,31 @@ export class TransactionsComponent implements OnInit {
   transactionsData$: Observable<TransactionsData>;
 
   constructor(
-    private store: Store,
     private dialog: MatDialog,
     private filterDateService: FilterDateService,
+    private transactionEntityService: TransactionEntityService,
     private transactionsService: TransactionsService
   ) {}
 
   ngOnInit(): void {
-    this.transactionsData$ = this.filterDateService.filterDateValue$.pipe(
-      mergeMap((date) => {
-        return combineLatest([
-          this.store.select(selectFilterByDateTransactions(date)),
-          this.store.select(selectTotalExpenseFilterByDateTransactions(date)),
-          this.store.select(selectTotalIncomeFilterByDateTransactions(date)),
-        ]);
-      }),
-      map(([transactions, totalExpense, totalIncome]) => {
+    this.transactionsData$ = combineLatest([
+      this.filterDateService.filterDateValue$,
+      this.transactionEntityService.entities$,
+    ]).pipe(
+      map(([filterDateValue, entities]) => {
+        const transactions = this.transactionsService.filterByDate(
+          filterDateValue,
+          entities
+        );
+        const totalExpense = this.transactionsService.filterByTypeAndGetTotal(
+          "expense",
+          transactions
+        );
+        const totalIncome = this.transactionsService.filterByTypeAndGetTotal(
+          "income",
+          transactions
+        );
+
         return { transactions, totalExpense, totalIncome };
       })
     );

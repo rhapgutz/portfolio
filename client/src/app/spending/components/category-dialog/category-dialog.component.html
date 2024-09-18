@@ -53,11 +53,18 @@
     *ngIf="category"
     mat-raised-button
     class="bg-red-700 text-white"
-    (click)="delete()"
+    (click)="onDelete()"
   >
     Delete
   </button>
-  <button mat-raised-button color="primary" #saveButton (click)="save()">
-    Save
+  <button
+    mat-raised-button
+    color="primary"
+    #saveButton
+    (click)="onSave()"
+    [disabled]="!form?.valid || (this.loading$ | async)"
+  >
+    <mat-spinner *ngIf="this.loading$ | async"></mat-spinner>
+    <ng-container *ngIf="!(this.loading$ | async)">Save</ng-container>
   </button>
 </mat-dialog-actions>

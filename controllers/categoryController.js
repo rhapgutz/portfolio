@@ -12,7 +12,7 @@ export const getAllCategories = async (req, res) => {
 
 export const getCategoryWithTotalAmount = async (req, res) => {
   const categories = await getCategoriesWithTotalTransactionAmount();
-  res.status(StatusCodes.OK).json({ categories });
+  res.status(StatusCodes.OK).json(categories);
 };
 
 export const getCategory = async (req, res) => {
@@ -22,34 +22,19 @@ export const getCategory = async (req, res) => {
 
 export const createCategory = async (req, res) => {
   const category = await Category.create(req.body);
-  res.status(StatusCodes.CREATED).json({
-    message: sprintf(ENTITY_MESSAGES.SUCCESS_CREATE, {
-      entity: ENTITY.CATEGORY,
-    }),
-    data: category,
-  });
+  res.status(StatusCodes.CREATED).json(category);
 };
 
 export const updateCategory = async (req, res) => {
   const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
-  res.status(StatusCodes.OK).json({
-    message: sprintf(ENTITY_MESSAGES.SUCCESS_UPDATE, {
-      entity: ENTITY.CATEGORY,
-    }),
-    data: category,
-  });
+  res.status(StatusCodes.OK).json(category);
 };
 
 export const deleteCategory = async (req, res) => {
   const category = await Category.findByIdAndDelete(req.params.id);
-  res.status(StatusCodes.OK).json({
-    message: sprintf(ENTITY_MESSAGES.SUCCESS_DELETE, {
-      entity: ENTITY.CATEGORY,
-    }),
-    data: category,
-  });
+  res.status(StatusCodes.OK).json(true);
 };
 
 export const getCategoriesByType = async (req, res) => {

@@ -1,9 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Category } from "../model/category";
+import { Category } from "../../model/category";
 import { catchError, tap } from "rxjs/operators";
-import { MessagesService } from "../components/messages/messages.service";
+import { MessagesService } from "../../components/messages/messages.service";
 import { Observable, throwError } from "rxjs";
+import { ApiResponse } from "../../model/api.response";
 
 @Injectable()
 export class CategoriesHttpService {
@@ -18,5 +19,21 @@ export class CategoriesHttpService {
         return throwError(err);
       })
     );
+  }
+
+  saveCategory(
+    categoryId: string,
+    changes: Partial<Category>
+  ): Observable<any> {
+    return this.http
+      .patch<ApiResponse>(`/api/v1/categories/${categoryId}`, changes)
+      .pipe(
+        catchError((err) => {
+          const message = "Could not save category";
+          console.log(message, err);
+          this.messages.showMessages("error", message);
+          return throwError(err);
+        })
+      );
   }
 }

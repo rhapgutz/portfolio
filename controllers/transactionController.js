@@ -6,12 +6,12 @@ import { ENTITY } from '../utils/constants.js';
 
 export const getAllTransactions = async (req, res) => {
   const transactions = await Transaction.find({}).populate('category').exec();
-  res.status(StatusCodes.OK).json({ transactions });
+  res.status(StatusCodes.OK).json(transactions);
 };
 
 export const getTransaction = async (req, res) => {
   const transaction = await Transaction.findById(req.params.id);
-  res.status(StatusCodes.OK).json({ transaction });
+  res.status(StatusCodes.OK).json(transaction);
 };
 
 export const createTransaction = async (req, res) => {
@@ -48,5 +48,5 @@ export const deleteTransaction = async (req, res) => {
 export const getTransactionsByType = async (req, res) => {
   const { type } = req.params;
   const transactions = await Transaction.find({ type });
-  res.status(StatusCodes.OK).json({ transactions });
+  res.status(StatusCodes.OK).json(transactions);
 };
