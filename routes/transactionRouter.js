@@ -2,7 +2,6 @@ import { Router } from 'express';
 import {
   createTransaction,
   deleteTransaction,
-  getAllTransactions,
   getTransaction,
   updateTransaction,
 } from '../controllers/transactionController.js';
@@ -13,10 +12,7 @@ import {
 
 const router = Router();
 
-router
-  .route('/')
-  .get(getAllTransactions)
-  .post(validateTransactionInput, createTransaction);
+router.route('/').post(validateTransactionInput, createTransaction);
 router
   .route('/:id')
   .get(validateTransactionIdParam, getTransaction)

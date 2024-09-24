@@ -19,7 +19,7 @@ export class ChartStore {
     private loading: LoadingService,
     private messages: MessagesService
   ) {
-    this.loadChartData();
+    //this.loadChartData();
   }
 
   private loadChartData() {

@@ -4,7 +4,7 @@ export interface Transaction {
   _id: string;
   type: string;
   category: Category;
-  transactionDate: Date;
+  transactionDate: Date | string;
   amount: number;
   notes: string;
 }

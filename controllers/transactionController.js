@@ -16,12 +16,7 @@ export const getTransaction = async (req, res) => {
 
 export const createTransaction = async (req, res) => {
   const transaction = await Transaction.create(req.body);
-  res.status(StatusCodes.CREATED).json({
-    message: sprintf(ENTITY_MESSAGES.SUCCESS_CREATE, {
-      entity: ENTITY.TRANSACTION,
-    }),
-    transaction,
-  });
+  res.status(StatusCodes.CREATED).json(transaction);
 };
 
 export const updateTransaction = async (req, res) => {
@@ -29,20 +24,12 @@ export const updateTransaction = async (req, res) => {
     req.params.id,
     req.body
   );
-  res.status(StatusCodes.OK).json({
-    message: sprintf(ENTITY_MESSAGES.SUCCESS_UPDATE, {
-      entity: ENTITY.TRANSACTION,
-    }),
-    transaction,
-  });
+  res.status(StatusCodes.OK).json(transaction);
 };
 
 export const deleteTransaction = async (req, res) => {
   const transaction = await Transaction.findByIdAndDelete(req.params.id);
-  res.status(StatusCodes.OK).json({
-    message: sprintf(ENTITY_MESSAGES, { entity: ENTITY.TRANSACTION }),
-    transaction,
-  });
+  res.status(StatusCodes.OK).json(true);
 };
 
 export const getTransactionsByType = async (req, res) => {

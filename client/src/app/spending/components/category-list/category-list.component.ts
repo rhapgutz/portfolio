@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Category } from "../../model/category";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { CategoriesStore } from "../../services/categories.store";
 import { CategoryDialogComponent } from "../category-dialog/category-dialog.component";
 import { CategoryEntityService } from "../../services/categories/category-entity.service";
 

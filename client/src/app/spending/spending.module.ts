@@ -29,6 +29,8 @@ import { Category } from "./model/category";
 import { Transaction } from "./model/transaction";
 import { TransactionEntityService } from "./services/transactions/transaction-entity.service";
 import { TransactionsDataService } from "./services/transactions/transactions-data.service";
+import { Moment } from "moment";
+import { TransactionsService } from "./pages/transactions/transactions.service";
 
 const routes: Routes = [
   {
@@ -36,6 +38,7 @@ const routes: Routes = [
     component: HomeComponent,
     resolve: {
       transactions: TransactionsResolver,
+      categories: CategoriesResolver,
     },
   },
   {
@@ -50,6 +53,7 @@ const routes: Routes = [
     component: TransactionsComponent,
     resolve: {
       transactions: TransactionsResolver,
+      categories: CategoriesResolver,
     },
   },
   {
@@ -57,29 +61,6 @@ const routes: Routes = [
     redirectTo: "/",
   },
 ];
-
-export function selectedCategoryId(a: Category): string {
-  return a._id;
-}
-
-export function selectedTransactionId(a: Transaction): string {
-  return a._id;
-}
-
-const entityMetadata: EntityMetadataMap = {
-  Category: {
-    selectId: selectedCategoryId,
-    entityDispatcherOptions: {
-      optimisticUpdate: true,
-    },
-  },
-  Transaction: {
-    selectId: selectedTransactionId,
-    entityDispatcherOptions: {
-      optimisticUpdate: true,
-    },
-  },
-};
 
 @NgModule({
   declarations: [
@@ -115,8 +96,26 @@ export class SpendingModule {
     private eds: EntityDefinitionService,
     private entityDataService: EntityDataService,
     private categoriesDataService: CategoriesDataService,
-    private transactionsDataService: TransactionsDataService
+    private transactionsDataService: TransactionsDataService,
+    private transactionsService: TransactionsService
   ) {
+    const entityMetadata: EntityMetadataMap = {
+      Category: {
+        selectId: (category: Category) => category._id,
+        entityDispatcherOptions: {
+          optimisticUpdate: true,
+        },
+      },
+      Transaction: {
+        selectId: (transaction: Transaction) => transaction._id,
+        entityDispatcherOptions: {
+          optimisticUpdate: true,
+        },
+        filterFn: (entities: Transaction[], pattern: { date: Moment | null }) =>
+          this.transactionsService.filterByDate(pattern.date, entities),
+      },
+    };
+
     eds.registerMetadataMap(entityMetadata);
     entityDataService.registerService("Category", categoriesDataService);
     entityDataService.registerService("Transaction", transactionsDataService);

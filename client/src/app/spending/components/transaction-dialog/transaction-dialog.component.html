@@ -1,18 +1,36 @@
 <h2 mat-dialog-title>{{ title }}</h2>
 <mat-dialog-content [formGroup]="form">
-  <mat-button-toggle-group formControlName="type" aria-abel="Select a category type" class="w-full items-center mb-6">
-    <mat-button-toggle class="w-6/12" value="expense">Expense</mat-button-toggle>
+  <mat-button-toggle-group
+    formControlName="type"
+    aria-abel="Select a category type"
+    class="w-full items-center mb-6"
+  >
+    <mat-button-toggle class="w-6/12" value="expense"
+      >Expense</mat-button-toggle
+    >
     <mat-button-toggle class="w-6/12" value="income">Income</mat-button-toggle>
   </mat-button-toggle-group>
   <mat-form-field class="w-full">
     <mat-label>Choose a date</mat-label>
-    <input matInput placeholder="Transaction Date" formControlName="transactionDate" [matDatepicker]="picker" />
+    <input
+      matInput
+      placeholder="Transaction Date"
+      formControlName="transactionDate"
+      [matDatepicker]="picker"
+    />
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <mat-form-field class="w-full">
-    <mat-select placeholder="Select Category" formControlName="category">
-      <mat-option *ngFor="let category of categories$ | async" [value]="category.id">
+    <mat-select
+      placeholder="Select Category"
+      formControlName="category"
+      (selectionChange)="onChange($event)"
+    >
+      <mat-option
+        *ngFor="let category of categories$ | async"
+        [value]="category._id"
+      >
         <mat-icon>{{ category.icon }}</mat-icon>
         {{ category.name }}
       </mat-option>
@@ -24,10 +42,8 @@
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions class="text-right px-5 pb-6 justify-end">
-  <button mat-raised-button (click)="close()">
-    Close
-  </button>
-  <button mat-raised-button color="primary" #saveButton (click)="save()">
+  <button mat-raised-button (click)="close()">Close</button>
+  <button mat-raised-button color="primary" #saveButton (click)="onSave()">
     Save
   </button>
 </mat-dialog-actions>

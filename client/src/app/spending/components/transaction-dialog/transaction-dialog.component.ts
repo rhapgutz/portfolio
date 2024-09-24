@@ -2,11 +2,12 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Transaction } from "../../model/transaction";
-import { TransactionsStore } from "../../services/transactions.store";
 import { combineLatest, Observable } from "rxjs";
 import { Category } from "../../model/category";
-import { CategoriesStore } from "../../services/categories.store";
 import { map, startWith, tap } from "rxjs/operators";
+import { CategoryEntityService } from "../../services/categories/category-entity.service";
+import { TransactionEntityService } from "../../services/transactions/transaction-entity.service";
+import moment from "moment";
 
 @Component({
   selector: "transaction-dialog",
@@ -18,27 +19,32 @@ export class TransactionDialogComponent implements OnInit {
   defaultTypeValue: string = "expense";
   form: FormGroup;
   transaction: Transaction;
-
   categories$: Observable<Category[]>;
+  mode: "update" | "create";
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<TransactionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) transaction: Transaction,
-    private transactionsStore: TransactionsStore,
-    private categoriesStore: CategoriesStore
+    @Inject(MAT_DIALOG_DATA) data,
+    private categoriesService: CategoryEntityService,
+    private transactionsService: TransactionEntityService
   ) {
-    this.transaction = transaction;
-    this.form = this.fb.group({
-      type: [transaction?.type, Validators.required],
-      transactionDate: [transaction?.transactionDate, Validators.required],
-      category: [transaction?.category?._id, Validators.required],
-      amount: [transaction?.amount, Validators.required],
-      notes: [transaction?.notes],
-    });
-    if (!transaction) {
-      this.form.controls["transactionDate"].setValue(new Date());
-      this.form.controls["type"].setValue(this.defaultTypeValue);
+    this.title = data.dialogTitle;
+    this.transaction = data.transaction;
+    this.mode = data.mode;
+
+    const formControls = {
+      type: ["expense", Validators.required],
+      transactionDate: [new Date(), Validators.required],
+      category: ["", Validators.required],
+      amount: ["", Validators.required],
+      notes: ["", []],
+    };
+
+    this.form = this.fb.group(formControls);
+
+    if (this.mode === "update") {
+      this.form.patchValue({ ...data.transaction });
     }
   }
 
@@ -51,7 +57,7 @@ export class TransactionDialogComponent implements OnInit {
 
     this.categories$ = combineLatest([
       transactionTypeInputValueChanges$,
-      this.categoriesStore.categories$,
+      this.categoriesService.entities$,
     ]).pipe(
       map(([transactionTypeValue, categories]) =>
         categories.filter(
@@ -62,7 +68,29 @@ export class TransactionDialogComponent implements OnInit {
     );
   }
 
-  save() {}
+  onChange(event: any) {
+    console.log(event);
+  }
+
+  onSave() {
+    const transaction: Transaction = {
+      ...this.transaction,
+      ...this.form.value,
+    };
+
+    transaction.transactionDate = moment(transaction.transactionDate).format(
+      "YYYY-MM-DD"
+    );
+
+    if (this.mode === "update") {
+      this.transactionsService.update(transaction);
+      this.dialogRef.close();
+    } else if (this.mode === "create") {
+      this.transactionsService.add(transaction).subscribe((newTransaction) => {
+        this.dialogRef.close();
+      });
+    }
+  }
 
   close() {
     this.dialogRef.close();

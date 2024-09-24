@@ -1,29 +1,13 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from "@angular/core";
-import { combineLatest, Observable } from "rxjs";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 import { Transaction } from "../../model/transaction";
-import { TransactionsStore } from "../../services/transactions.store";
-import { combineAll, concatMap, map, mergeMap, tap } from "rxjs/operators";
-import { DatePipe } from "@angular/common";
+import { map, tap } from "rxjs/operators";
 import { provideMomentDateAdapter } from "@angular/material-moment-adapter";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { TransactionDialogComponent } from "../../components/transaction-dialog/transaction-dialog.component";
 import { FilterDateService } from "../../components/filter-date/filter-date.service";
 import { TransactionsData } from "../../model/transactionsData";
 import { TransactionsService } from "./transactions.service";
-import { Store } from "@ngrx/store";
-import {
-  selectAllTransactions,
-  selectExpenseTransactions,
-  selectFilterByDateTransactions,
-  selectIncomeTransactions,
-  selectTotalExpenseFilterByDateTransactions,
-  selectTotalIncomeFilterByDateTransactions,
-} from "../../states/transactions/transactions.selectors";
 import { TransactionEntityService } from "../../services/transactions/transaction-entity.service";
 
 export const MY_FORMATS = {
@@ -51,33 +35,26 @@ export class TransactionsComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private filterDateService: FilterDateService,
     private transactionEntityService: TransactionEntityService,
     private transactionsService: TransactionsService
   ) {}
 
   ngOnInit(): void {
-    this.transactionsData$ = combineLatest([
-      this.filterDateService.filterDateValue$,
-      this.transactionEntityService.entities$,
-    ]).pipe(
-      map(([filterDateValue, entities]) => {
-        const transactions = this.transactionsService.filterByDate(
-          filterDateValue,
-          entities
-        );
-        const totalExpense = this.transactionsService.filterByTypeAndGetTotal(
-          "expense",
-          transactions
-        );
-        const totalIncome = this.transactionsService.filterByTypeAndGetTotal(
-          "income",
-          transactions
-        );
+    this.transactionsData$ =
+      this.transactionEntityService.filteredEntities$.pipe(
+        map((transactions) => {
+          const totalExpense = this.transactionsService.filterByTypeAndGetTotal(
+            "expense",
+            transactions
+          );
+          const totalIncome = this.transactionsService.filterByTypeAndGetTotal(
+            "income",
+            transactions
+          );
 
-        return { transactions, totalExpense, totalIncome };
-      })
-    );
+          return { transactions, totalExpense, totalIncome };
+        })
+      );
   }
 
   onAddNewTransaction() {
@@ -86,6 +63,10 @@ export class TransactionsComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = false;
     dialogConfig.width = "400px";
+    dialogConfig.data = {
+      dialogTitle: "New Transaction",
+      mode: "create",
+    };
 
     const dialogRef = this.dialog.open(
       TransactionDialogComponent,

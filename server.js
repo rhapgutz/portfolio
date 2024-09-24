@@ -7,6 +7,7 @@ import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 import categoriesRouter from './routes/categoriesRouter.js';
 import categoryRouter from './routes/categoryRouter.js';
 import transactionRouter from './routes/transactionRouter.js';
+import transactionsRouter from './routes/transactionsRouter.js';
 
 dotenv.config();
 
@@ -19,7 +20,8 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use('/api/categories', categoriesRouter);
 app.use('/api/category', categoryRouter);
-app.use('/api/transactions', transactionRouter);
+app.use('/api/transactions', transactionsRouter);
+app.use('/api/transaction', transactionRouter);
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'not found' });

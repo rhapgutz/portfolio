@@ -14,10 +14,7 @@ export class TransactionListComponent implements OnInit {
 
   constructor(private dialog: MatDialog) {}
 
-  ngOnInit(): void {
-    console.log(this.transactions);
-    return;
-  }
+  ngOnInit(): void {}
 
   onEditTransaction(transaction: Transaction): void {
     const dialogConfig = new MatDialogConfig();
@@ -25,8 +22,11 @@ export class TransactionListComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = false;
     dialogConfig.width = "400px";
-
-    dialogConfig.data = transaction;
+    dialogConfig.data = {
+      dialogTitle: "Edit Transaction",
+      mode: "update",
+      transaction,
+    };
 
     const dialogRef = this.dialog.open(
       TransactionDialogComponent,

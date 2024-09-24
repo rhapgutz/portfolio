@@ -2,9 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatDatepicker } from "@angular/material/datepicker";
 import moment, { Moment } from "moment";
-import { startWith, tap } from "rxjs/operators";
-import { FilterDateService } from "./filter-date.service";
-import { map } from "highcharts";
+import { first, tap } from "rxjs/operators";
+import { TransactionEntityService } from "../../services/transactions/transaction-entity.service";
 
 @Component({
   selector: "filter-date",
@@ -14,15 +13,33 @@ import { map } from "highcharts";
 export class FilterDateComponent implements OnInit {
   readonly filterDate = new FormControl(moment());
 
-  constructor(private filterDateService: FilterDateService) {}
+  defaultDateLoaded = false;
+
+  constructor(private transactionsService: TransactionEntityService) {}
 
   ngOnInit(): void {
-    const defaultDate = this.filterDate.value ?? moment();
     this.filterDate.valueChanges
       .pipe(
-        tap((filterDateValue) =>
-          this.filterDateService.setFilterDateValue(filterDateValue)
-        )
+        tap((filterDateValue) => {
+          if (this.defaultDateLoaded) {
+            this.transactionsService.setFilter({
+              date: filterDateValue.toJSON(),
+            });
+          }
+        })
+      )
+      .subscribe();
+
+    this.transactionsService.filter$
+      .pipe(
+        tap((filters) => {
+          const defaultDate = filters.date ? moment(filters.date) : moment();
+          if (!this.defaultDateLoaded) {
+            this.defaultDateLoaded = true;
+            this.filterDate.setValue(defaultDate);
+          }
+        }),
+        first()
       )
       .subscribe();
   }

@@ -1,38 +1,15 @@
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
-import {
-  BehaviorSubject,
-  combineLatest,
-  from,
-  Observable,
-  of,
-  zip,
-} from "rxjs";
-import { Transaction } from "../../model/transaction";
-import { TransactionsStore } from "../../services/transactions.store";
-import {
-  groupBy,
-  map,
-  mergeMap,
-  shareReplay,
-  tap,
-  toArray,
-} from "rxjs/operators";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import { provideMomentDateAdapter } from "@angular/material-moment-adapter";
-import { CategoryTransaction } from "../../model/categoryTransaction";
 import { SpendingData } from "../../model/spending";
 import { FilterDateService } from "../../components/filter-date/filter-date.service";
 import { TransactionsService } from "../transactions/transactions.service";
-import { PieChartSeriesData } from "../../model/pieChartSeriesData";
-import { DatePipe } from "@angular/common";
 import { ChartStore } from "../../services/chart.store";
-import { Store } from "@ngrx/store";
-import {
-  selectExpenseFilterByDateTransactions,
-  selectFilterByDateTransactions,
-  selectTotalExpenseFilterByDateTransactions,
-  selectTotalIncomeFilterByDateTransactions,
-} from "../../states/transactions/transactions.selectors";
 import { TransactionEntityService } from "../../services/transactions/transaction-entity.service";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { TransactionDialogComponent } from "../../components/transaction-dialog/transaction-dialog.component";
+import { DialogRef } from "@angular/cdk/dialog";
 
 export const MY_FORMATS = {
   parse: {
@@ -57,30 +34,40 @@ export class HomeComponent implements OnInit {
   spendingData$: Observable<SpendingData>;
 
   constructor(
-    private store: Store,
-    private transactionsStore: TransactionsStore,
-    private filterDateService: FilterDateService,
+    private dialog: MatDialog,
     private transactionsService: TransactionsService,
     private chartStore: ChartStore,
     private transactionEntityService: TransactionEntityService
   ) {}
 
   ngOnInit(): void {
-    this.spendingData$ = combineLatest([
-      this.filterDateService.filterDateValue$,
-      this.transactionEntityService.entities$,
-    ]).pipe(
-      map(([filterDateValue, transactions]) => {
-        return this.transactionsService.fetchSpendingData(
-          filterDateValue,
-          transactions
-        );
+    this.spendingData$ = this.transactionEntityService.filteredEntities$.pipe(
+      map((transactions) => {
+        return this.transactionsService.fetchSpendingData(transactions);
       })
     );
 
     this.spendingData$.subscribe((spendingData) => {
-      console.log(spendingData);
       this.chartStore.setChartData(spendingData.categoriesChartData);
     });
+  }
+
+  onAddNewTransaction() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = false;
+    dialogConfig.width = "400px";
+    dialogConfig.data = {
+      dialogTitle: "New Transaction",
+      mode: "create",
+    };
+
+    const dialogRef = this.dialog.open(
+      TransactionDialogComponent,
+      dialogConfig
+    );
+
+    dialogRef.afterClosed().subscribe();
   }
 }
