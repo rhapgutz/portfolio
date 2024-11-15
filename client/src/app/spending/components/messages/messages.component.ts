@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { MessagesService } from "./messages.service";
-import { Message } from "../../model/message";
+import { Message } from "../../models/message";
 
 @Component({
   selector: "messages",

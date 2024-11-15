@@ -4,13 +4,15 @@ const { validateHTMLColorHex } = pkg;
 import { BadRequestError, NotFoundError } from '../errors/customErrors.js';
 import {
   CATEGORY_TYPES,
-  REPEAT_SETTINGS,
-  REPEAT_TYPES,
   TRANSACTION_TYPES,
 } from '../utils/constants.js';
 import Category from '../models/CategoryModel.js';
 import Transaction from '../models/TransactionModel.js';
+import UserStory from '../models/UserStoryModel.js'
+import UserStoryVote from '../models/UserStoryVoteModel.js'
 import mongoose from 'mongoose';
+import User from '../models/UserModel.js';
+import UserMessage from '../models/UserMessageModel.js';
 
 const withValidationErrors = (validateValues) => {
   return [
@@ -121,4 +123,84 @@ export const validateProductInput = withValidationErrors([
     .isLength({ max: 50 })
     .withMessage('Name must be between 1 and 50 characters long')
     .trim(),
+]);
+
+export const validateUserStoryInput = withValidationErrors([
+  body('title')
+    .notEmpty()
+    .withMessage('Title is required')
+    .isLength({ max: 50 })
+    .withMessage('Title must be between 1 and 50 characters long')
+    .trim()
+]);
+
+export const validateUserStoryIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value);
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id');
+    const userStory = await UserStory.findById(value);
+    if (!userStory) throw new NotFoundError(`no user story with id : ${value}`);
+  }),
+]);
+
+export const validateUserStoryVoteInput = withValidationErrors([
+  body('vote')
+    .notEmpty()
+    .withMessage('Vote is required')
+]);
+
+export const validateUserStoryVoteIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value);
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id');
+    const userStoryVote = await UserStoryVote.findById(value);
+    if (!userStoryVote) throw new NotFoundError(`no user story with id : ${value}`);
+  }),
+]);
+
+
+export const validateRegisterInput = withValidationErrors([
+  body('firstName').notEmpty().withMessage('First name is required'),
+  body('lastName').notEmpty().withMessage('Last name is required'),
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format')
+    .custom(async (email) => {
+      const user = await User.findOne({ email });
+      if (user) {
+        throw new BadRequestError('email already exists');
+      }
+    }),
+  body('password')
+    .notEmpty()
+    .withMessage('password is required')
+    .isLength({ min: 8 })
+    .withMessage('password must be at least 8 characters long')
+]);
+
+export const validateLoginInput = withValidationErrors([
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format'),
+  body('password').notEmpty().withMessage('password is required'),
+]);
+
+export const validateUserMessageInput = withValidationErrors([
+  body('message')
+    .notEmpty()
+    .withMessage('Message is required')
+    .trim()
+]);
+
+export const validateUserMessageIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value);
+    if (!isValidId) throw new BadRequestError('invalid MongoDB id');
+    const userMessage = await UserMessage.findById(value);
+    if (!userMessage) throw new NotFoundError(`no user message with id : ${value}`);
+  }),
 ]);

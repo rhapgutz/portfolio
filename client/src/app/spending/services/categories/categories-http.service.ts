@@ -1,10 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Category } from "../../model/category";
+import { Category } from "../../models/category";
 import { catchError, tap } from "rxjs/operators";
 import { MessagesService } from "../../components/messages/messages.service";
 import { Observable, throwError } from "rxjs";
-import { ApiResponse } from "../../model/api.response";
+import { ApiResponse } from "../../models/api.response";
 
 @Injectable()
 export class CategoriesHttpService {

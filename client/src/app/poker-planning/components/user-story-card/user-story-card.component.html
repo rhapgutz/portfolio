@@ -1,0 +1,11 @@
+<div 
+  class="max-w-md rounded overflow-hidden shadow-lg mb-4 hover:cursor-pointer hover:bg-gray-300"
+  [ngClass]="{ 'bg-sky-300': selected, }"
+  *ngIf="userStory">
+  <div class="px-6 py-4" (click)="onSelectUserStory(userStory)">
+    <div class="font-bold text-xl mb-2">{{ userStory.code }}</div>
+    <p class="text-gray-700 text-base">
+      {{ userStory.title }}
+    </p>
+  </div>
+</div>

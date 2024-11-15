@@ -27,6 +27,7 @@ export const DEFAULT = {
   REPEAT_VALUE: 1,
   REPEAT_TYPE: 'Day',
   ORDER_STATUS: 'pending',
+  USER_STORY_STATUS: 'planning'
 };
 
 export const ENTITY = {
@@ -43,3 +44,9 @@ export const ORDER_STATUSES = {
   COMPLETED: 'completed',
   CANCELLED: 'cancelled',
 };
+
+export const USER_STORY_STATUSES = {
+  PLANNING: 'planning',
+  ACTIVE: 'active',
+  CLOSED: 'closed'
+}

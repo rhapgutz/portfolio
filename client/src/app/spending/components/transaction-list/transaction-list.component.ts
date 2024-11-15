@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Transaction } from "../../model/transaction";
+import { Transaction } from "../../models/transaction";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { TransactionDialogComponent } from "../transaction-dialog/transaction-dialog.component";
 

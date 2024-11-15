@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, of, throwError } from "rxjs";
-import { Category } from "../model/category";
+import { Category } from "../models/category";
 import { catchError, map, tap } from "rxjs/operators";
 import { LoadingService } from "../components/loading/loading.service";
-import { Transaction } from "../model/transaction";
+import { Transaction } from "../models/transaction";
 import { DatePipe } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { MessagesService } from "../components/messages/messages.service";

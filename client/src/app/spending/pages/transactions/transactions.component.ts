@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { Transaction } from "../../model/transaction";
+import { Transaction } from "../../models/transaction";
 import { map, tap } from "rxjs/operators";
 import { provideMomentDateAdapter } from "@angular/material-moment-adapter";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { TransactionDialogComponent } from "../../components/transaction-dialog/transaction-dialog.component";
 import { FilterDateService } from "../../components/filter-date/filter-date.service";
-import { TransactionsData } from "../../model/transactionsData";
+import { TransactionsData } from "../../models/transactionsData";
 import { TransactionsService } from "./transactions.service";
 import { TransactionEntityService } from "../../services/transactions/transaction-entity.service";
 

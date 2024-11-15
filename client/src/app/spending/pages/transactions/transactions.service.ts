@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { Transaction } from "../../model/transaction";
+import { Transaction } from "../../models/transaction";
 import moment, { Moment } from "moment";
 import { DatePipe } from "@angular/common";
-import { Category } from "../../model/category";
-import { CategoryTransaction } from "../../model/categoryTransaction";
-import { SpendingData } from "../../model/spending";
-import { PieChartSeriesData } from "../../model/pieChartSeriesData";
+import { Category } from "../../models/category";
+import { CategoryTransaction } from "../../models/categoryTransaction";
+import { SpendingData } from "../../models/spending";
+import { PieChartSeriesData } from "../../models/pieChartSeriesData";
 
 @Injectable()
 export class TransactionsService {

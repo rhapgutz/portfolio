@@ -1,0 +1,14 @@
+<div class="flex flex-row m-4" *ngIf="planningData$ | async as planningData">
+  <div class="basis-1/5" >
+    <user-story-card *ngFor="let userStory of planningData.userStories"
+      [userStory]="userStory"
+      (selectedUserStoryEvent)="updateSelectedUserStoryId($event)"
+    ></user-story-card>
+  </div>
+  <div class="basis-3/5 rounded overflow-hidden shadow-lg mx-4 p-4">
+    <user-story></user-story>
+  </div>
+  <div class="basis-1/5 rounded overflow-hidden shadow-lg p-4">
+    <user-messages></user-messages>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Category } from "../../model/category";
+import { Category } from "../../models/category";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { BehaviorSubject, Observable } from "rxjs";
 import { delay } from "rxjs/operators";

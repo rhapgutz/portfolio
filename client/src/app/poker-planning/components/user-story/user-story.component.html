@@ -1,0 +1,31 @@
+<div  *ngIf="currentUserStory$ | async as currentUserStory">
+  <div class="w-full">
+    <h3 class="font-bold text-xl mb2-2">{{ currentUserStory.title }}</h3>
+    <div>
+      {{ currentUserStory.description }}
+    </div>
+  </div>
+  <div class="flex gap-4 w-3/4 my-4" *ngIf="pokerCards$ | async as pokerCards">
+    <poker-card *ngFor="let pokerCard of pokerCards"
+      [canSelect]="true"
+      [data]="pokerCard"
+      (selectedCardEvent)="updateSelectedPokerCard($event)"
+    ></poker-card>
+  </div>
+  <ng-container *ngIf="userCards$ | async as userCards">
+    <div *ngIf="userCards.length">
+      <div class="w-full my-4">
+        <h4>User Votes</h4>
+      </div>
+      <div class="flex gap-4 w/3/4 my-4">
+        <poker-card *ngFor="let userCard of userCards"
+          [canSelect]="false"
+          [data]="userCard"
+          [revealCards]="showUserVotes$ | async"
+        ></poker-card>
+      </div>
+      <button mat-raised-button color="primary" (click)="onRevealCards()">Reveal</button>
+    </div>
+  </ng-container>
+</div>
+

@@ -3,9 +3,9 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { LoadingService } from "../components/loading/loading.service";
 import { MessagesService } from "../components/messages/messages.service";
-import { Category } from "../model/category";
+import { Category } from "../models/category";
 import { catchError, map, tap } from "rxjs/operators";
-import { PieChartSeriesData } from "../model/pieChartSeriesData";
+import { PieChartSeriesData } from "../models/pieChartSeriesData";
 
 @Injectable({
   providedIn: "root",

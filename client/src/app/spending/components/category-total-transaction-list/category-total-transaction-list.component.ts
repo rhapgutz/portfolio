@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { CategoryTransaction } from "../../model/categoryTransaction";
+import { CategoryTransaction } from "../../models/categoryTransaction";
 
 @Component({
   selector: "category-total-transaction-list",

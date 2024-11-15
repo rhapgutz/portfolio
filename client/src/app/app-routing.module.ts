@@ -1,13 +1,8 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
+import { AuthGuard } from "./auth/auth.guard";
 
-const routes: Routes = [
-  {
-    path: "spending",
-    loadChildren: () =>
-      import("./spending/spending.module").then((m) => m.SpendingModule),
-  },
-];
+const routes: Routes = [];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -1,8 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import Transaction from '../models/TransactionModel.js';
-import { sprintf } from 'sprintf-js';
-import { ENTITY_MESSAGES } from '../utils/messages.js';
-import { ENTITY } from '../utils/constants.js';
+import Category from '../models/CategoryModel.js';
 
 export const getAllTransactions = async (req, res) => {
   const transactions = await Transaction.find({}).populate('category').exec();
@@ -15,7 +13,7 @@ export const getTransaction = async (req, res) => {
 };
 
 export const createTransaction = async (req, res) => {
-  const transaction = await Transaction.create(req.body);
+  const transaction = (await Transaction.create(req.body)).populate('category').exec();
   res.status(StatusCodes.CREATED).json(transaction);
 };
 

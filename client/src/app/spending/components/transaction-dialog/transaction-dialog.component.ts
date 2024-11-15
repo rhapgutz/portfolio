@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Transaction } from "../../model/transaction";
+import { Transaction } from "../../models/transaction";
 import { combineLatest, Observable } from "rxjs";
-import { Category } from "../../model/category";
+import { Category } from "../../models/category";
 import { map, startWith, tap } from "rxjs/operators";
 import { CategoryEntityService } from "../../services/categories/category-entity.service";
 import { TransactionEntityService } from "../../services/transactions/transaction-entity.service";

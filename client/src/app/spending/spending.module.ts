@@ -25,40 +25,36 @@ import {
 } from "@ngrx/data";
 import { CategoryEntityService } from "./services/categories/category-entity.service";
 import { CategoriesDataService } from "./services/categories/categories-data.service";
-import { Category } from "./model/category";
-import { Transaction } from "./model/transaction";
+import { Category } from "./models/category";
+import { Transaction } from "./models/transaction";
 import { TransactionEntityService } from "./services/transactions/transaction-entity.service";
 import { TransactionsDataService } from "./services/transactions/transactions-data.service";
 import { Moment } from "moment";
 import { TransactionsService } from "./pages/transactions/transactions.service";
+import { AuthGuard } from "../auth/auth.guard";
 
 const routes: Routes = [
   {
-    path: "",
-    component: HomeComponent,
+    path: "spending",
     resolve: {
       transactions: TransactionsResolver,
       categories: CategoriesResolver,
     },
-  },
-  {
-    path: "categories",
-    component: CategoriesComponent,
-    resolve: {
-      categories: CategoriesResolver,
-    },
-  },
-  {
-    path: "transactions",
-    component: TransactionsComponent,
-    resolve: {
-      transactions: TransactionsResolver,
-      categories: CategoriesResolver,
-    },
-  },
-  {
-    path: "**",
-    redirectTo: "/",
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: "",
+        component: HomeComponent,
+      },
+      {
+        path: "categories",
+        component: CategoriesComponent,
+      },
+      {
+        path: "transactions",
+        component: TransactionsComponent,
+      }
+    ]
   },
 ];
 

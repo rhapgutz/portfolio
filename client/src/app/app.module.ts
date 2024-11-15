@@ -15,14 +15,22 @@ import { environment } from "../environments/environment";
 import { EffectsModule } from "@ngrx/effects";
 import { AppEffects } from "./app.effects";
 import { RouterState, StoreRouterConnectingModule } from "@ngrx/router-store";
-import { EntityDataModule } from "@ngrx/data";
+import { DefaultDataServiceConfig, EntityDataModule } from "@ngrx/data";
+import { AuthModule } from "./auth/auth.module";
+import { PokerPlanningModule } from "./poker-planning/poker-planning.module";
 
+const defaultDataServiceConfig: DefaultDataServiceConfig = {
+  root: `${environment.base_api_url}/api/v1/`,
+  timeout: 3000, // request timeout
+};
 @NgModule({
   declarations: [AppComponent],
   bootstrap: [AppComponent],
   imports: [
     SharedModule,
     SpendingModule,
+    PokerPlanningModule,
+    AuthModule.forRoot(),
     AppRoutingModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
@@ -44,6 +52,6 @@ import { EntityDataModule } from "@ngrx/data";
       routerState: RouterState.Minimal,
     }),
   ],
-  providers: [provideHttpClient(withInterceptorsFromDi())],
+  providers: [{ provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig }, provideHttpClient(withInterceptorsFromDi())],
 })
 export class AppModule {}

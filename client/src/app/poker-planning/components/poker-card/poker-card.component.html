@@ -1,0 +1,15 @@
+<div
+  class="flex flex-col justify-center items-center"
+  (click)="onSelectedCard()"
+>
+  <div class='h-36 w-24 relative'>
+    <div 
+      class='absolute w-full h-full rounded-lg drop-shadow-md z-30 flex p-4 justify-center place-items-center text-xl font-bold'
+      [ngClass]="{ 'bg-sky-700 text-white' : data.selected || !canSelect, 'bg-gray-100' : !data.selected, 'hover:bg-gray-700 hover:cursor-pointer hover:text-white' : canSelect }"
+    >{{ getCardValue() }}
+    </div>
+  </div>
+  <div class="inline-flex items-center justify-center w-12 h-12 text-xl text-white bg-gray-500 rounded-full mt-2" *ngIf="data.user">
+    {{ getUserInitial() }}
+  </div>
+</div>

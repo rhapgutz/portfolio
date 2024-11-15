@@ -2,14 +2,12 @@ import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { provideMomentDateAdapter } from "@angular/material-moment-adapter";
-import { SpendingData } from "../../model/spending";
-import { FilterDateService } from "../../components/filter-date/filter-date.service";
+import { SpendingData } from "../../models/spending";
 import { TransactionsService } from "../transactions/transactions.service";
 import { ChartStore } from "../../services/chart.store";
 import { TransactionEntityService } from "../../services/transactions/transaction-entity.service";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { TransactionDialogComponent } from "../../components/transaction-dialog/transaction-dialog.component";
-import { DialogRef } from "@angular/cdk/dialog";
 
 export const MY_FORMATS = {
   parse: {

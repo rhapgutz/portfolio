@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import { User } from "../model/user";
+import { User } from "../models/user";
 import { map, shareReplay, tap } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 

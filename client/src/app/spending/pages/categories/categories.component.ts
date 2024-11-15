@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Category } from "../../model/category";
+import { Category } from "../../models/category";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";

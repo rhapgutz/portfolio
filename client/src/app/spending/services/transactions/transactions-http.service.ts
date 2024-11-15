@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { MessagesService } from "../../components/messages/messages.service";
-import { Transaction } from "../../model/transaction";
+import { Transaction } from "../../models/transaction";
 import { catchError, map } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
 import { Injectable } from "@angular/core";

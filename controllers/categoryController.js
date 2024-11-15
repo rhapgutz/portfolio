@@ -1,8 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
 import Category from '../models/CategoryModel.js';
-import { sprintf } from 'sprintf-js';
-import { ENTITY_MESSAGES } from '../utils/messages.js';
-import { ENTITY } from '../utils/constants.js';
 import { getCategoriesWithTotalTransactionAmount } from '../useCases/categoryUseCase.js';
 
 export const getAllCategories = async (req, res) => {

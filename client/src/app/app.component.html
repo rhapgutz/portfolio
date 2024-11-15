@@ -1,17 +1,33 @@
 <mat-sidenav-container fullscreen>
-  <mat-sidenav> </mat-sidenav>
+  <mat-sidenav #start>
+    <mat-nav-list (click)="start.close()">
+      <a mat-list-item routerLink="/spending/categories">
+        <mat-icon>category</mat-icon>
+        <span>Categories</span>
+      </a>
+      <a mat-list-item routerLink="/spending/transactions">
+        <mat-icon>wallet</mat-icon>
+        <span>Transactions</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
   <mat-toolbar color="primary">
-    <button mat-icon-button routerLink="/">
-      <mat-icon>home</mat-icon>
+    <button class="menu-button" mat-icon-button (click)="start.open('mouse')">
+      <mat-icon>menu</mat-icon>
     </button>
     <span class="spacer"></span>
-    <a mat-button routerLink="/transactions">
+    <a mat-button routerLink="/spending">
       <mat-icon>wallet</mat-icon>
-      Transactions
+      Spending
     </a>
-    <a mat-button routerLink="/categories">
-      <mat-icon>category</mat-icon>
-      Categories
+    <a mat-button routerLink="/login" *ngIf="isLoggedOut$ | async">
+        <mat-icon>account_circle</mat-icon>
+        <span>Login</span>
+    </a>
+
+    <a mat-button (click)="logout()" *ngIf="isLoggedIn$ | async">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Logout</span>
     </a>
   </mat-toolbar>
   <messages></messages>

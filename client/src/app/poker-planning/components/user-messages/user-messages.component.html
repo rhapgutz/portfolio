@@ -1,0 +1,32 @@
+<div class="h-screen flex flex-col" *ngIf="data$ | async as data">
+  <div class="bg-gray-200 flex-1 overflow-y-scroll">
+    <div class="px-4 py-2">
+      <ng-container *ngFor="let userMessage of data.messages">
+        <div class="flex items-center mb-2" *ngIf="userMessage.user._id !== data.user._id">
+          <div class="inline-flex items-center justify-center w-12 h-12 text-xl text-white bg-gray-500 rounded-full mt-2" *ngIf="userMessage.user">
+            {{ getUserInitial(userMessage.user) }}
+          </div>
+          <div class="bg-white rounded-lg p-2 shadow mb-2 max-w-sm">
+            {{ userMessage.message }}
+          </div>
+        </div>
+        <div class="flex items-center justify-end" *ngIf="userMessage.user._id === data.user._id">
+          <div class="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
+            {{ userMessage.message }}
+          </div>
+          <div class="inline-flex items-center justify-center w-12 h-12 text-xl text-white bg-gray-500 rounded-full mt-2" *ngIf="userMessage.user">
+            {{ getUserInitial(userMessage.user) }}
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="bg-gray-100 px-4 py-2">
+    <div class="flex items-center">
+      <input class="w-full border rounded-full py-2 px-4 mr-2" type="text" placeholder="Type your message..." [(ngModel)]="newMessage">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-full" (click)="sendMessage()" [disabled]="!newMessage">
+        Send
+      </button>
+    </div>
+  </div>
+</div>

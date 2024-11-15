@@ -3,7 +3,7 @@ import {
   EntityCollectionServiceBase,
   EntityCollectionServiceElementsFactory,
 } from "@ngrx/data";
-import { Category } from "../../model/category";
+import { Category } from "../../models/category";
 
 @Injectable()
 export class CategoryEntityService extends EntityCollectionServiceBase<Category> {
